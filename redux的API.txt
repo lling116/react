@@ -1,0 +1,59 @@
+关键API函数：
+    createStore(reducer)用来生成store
+        *reducer是 我们需要自己实现的回调函数
+            const reducer = (state, action) => {
+                 if (!state) return {
+                    themeColor: 'red'
+                }
+                 switch (action.type) {
+                     case 'CHANGE_COLOR':
+                         return { ...state, themeColor: action.themeColor }
+                    default:
+                       return state
+                 } 
+            }
+            
+        *action  state也是我们需要自定义的
+            action 格式：
+
+
+*store.getState() 
+       获取状态
+*store.dispatch(action)   //调用reducer
+*store.subscribe(function()) 
+ // 设置监听函数，只要state 一变化就执行该函数function
+ 
+
+
+********redux 的mapDispatchToProps 和connect**************
+
+
+ import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+
+export const connect = (mapStateToProps) => (WrappedComponent) => {
+  class Connect extends Component {
+    static contextTypes = {
+      store: PropTypes.object
+    }
+   
+  const mapStateToProps = (state) => {
+  return {
+    themeColor: state.themeColor,
+    themeName: state.themeName,
+    fullName: `${state.firstName} ${state.lastName}`
+    ...
+  }
+}
+    render () {
+      const { store } = this.context
+      let stateProps = mapStateToProps(store.getState())
+      // {...stateProps} 意思是把这个对象里面的属性全部通过 `props` 方式传递进去
+      return <WrappedComponent {...stateProps} />
+    }
+  }
+
+  return Connect
+}
+
+*mapStateToProps需要我们自己定义
