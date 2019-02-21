@@ -31,12 +31,6 @@
  import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-export const connect = (mapStateToProps) => (WrappedComponent) => {
-  class Connect extends Component {
-    static contextTypes = {
-      store: PropTypes.object
-    }
-   
   const mapStateToProps = (state) => {
   return {
     themeColor: state.themeColor,
@@ -45,6 +39,13 @@ export const connect = (mapStateToProps) => (WrappedComponent) => {
     ...
   }
 }
+
+export const connect = (mapStateToProps) => (WrappedComponent) => {
+  class Connect extends Component {
+    static contextTypes = {
+      store: PropTypes.object
+    }
+   
     render () {
       const { store } = this.context
       let stateProps = mapStateToProps(store.getState())
@@ -57,3 +58,11 @@ export const connect = (mapStateToProps) => (WrappedComponent) => {
 }
 
 *mapStateToProps需要我们自己定义
+*connect 是传入mapStateToProps 然后返回一个函数
+
+*connect的作用是：
+   封装组件，返回组件；它通过mapStateToProps向封装的组件传入state的类型；
+   通过mapDispatchToProps来更新
+
+
+这样我们就把所有关于 context 的代码从组件里面删除了
